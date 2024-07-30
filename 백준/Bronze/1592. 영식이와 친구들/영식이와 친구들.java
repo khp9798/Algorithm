@@ -1,17 +1,18 @@
-import java.util.Scanner;
+import java.io.*;
+import java.util.*;
+
 
 public class Main {
 
 	static int cnt=0;
-	public static void main(String[] args) {
+	public static void main(String[] args) throws Exception{
 		// TODO Auto-generated method stub
-		Scanner sc = new Scanner(System.in);
-
-		int N = sc.nextInt();
-
-		int M = sc.nextInt();
-
-		int L = sc.nextInt();
+		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+		StringTokenizer st = new StringTokenizer(br.readLine());
+		
+		int N = Integer.parseInt(st.nextToken());
+		int M = Integer.parseInt(st.nextToken());
+		int L = Integer.parseInt(st.nextToken());
 
 		int[] count = new int[N];
 
