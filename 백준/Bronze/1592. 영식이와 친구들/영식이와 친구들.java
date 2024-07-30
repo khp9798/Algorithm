@@ -1,61 +1,45 @@
-import java.io.*;
 import java.util.*;
-
+import java.io.*;
 
 public class Main {
 
-	static int cnt=0;
 	public static void main(String[] args) throws Exception{
 		// TODO Auto-generated method stub
 		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
-		StringTokenizer st = new StringTokenizer(br.readLine());
-		
+        StringTokenizer st = new StringTokenizer(br.readLine());
+
 		int N = Integer.parseInt(st.nextToken());
+
 		int M = Integer.parseInt(st.nextToken());
+
 		int L = Integer.parseInt(st.nextToken());
 
-		int[] count = new int[N];
+		int[] count = new int[N + 1];
 
 		// 일단 1번자리 사람이 공을 받고 시작하기 때문에 1로 초기화
-		count[0] = 1;
+		count[1] = 1;
+		int num = 1;
+		int cnt = 0;
 
-		playball(count, 0, L, M);
-
-		System.out.println(playball(count, 0, L, M));
-
-	}
-
-	static int playball(int[] count, int idx, int L, int M) {
-		for (int i = 0; i < count.length; i++) {
-			if (count[i] == M)
+		while (true) {
+			if (count[num] == M)
 				break;
-			else {
-				cnt++;
-				if (count[idx] % 2 == 1) {
-					// 시계방향으로 2칸 이동했을 때 배열의 크기를 넘는다면
-					if (idx + L > count.length - 1) {
-						count[L - (count.length - 1 - idx) - 1]++;
-						return playball(count, L - (count.length - 1 - idx) - 1, L, M);
-					}
-					// 넘지 않는 경우
-					else {
-						count[idx + L]++;
-						return playball(count, idx + L, L, M);
-					}
-				} else {
-					if (idx - L < 0) {
-						count[count.length - 1 - (L - idx - 1)]++;
-						return playball(count, count.length - 1 - (L - idx - 1), L, M);
-
-					} else {
-						count[idx - L]++;
-						return playball(count, idx - L, L, M);
-					}
-				}
-
+			if (count[num] % 2 == 1) {
+				num = num + L;
+				if (num > N)
+					num = num - N;
+			} else {
+				num = num - L;
+				if (num < 1)
+					num = num + N;
 			}
+
+			count[num]++;
+			cnt++;
+
 		}
-		return cnt;
+
+		System.out.println(cnt);
 
 	}
 
