@@ -8,10 +8,14 @@ public class Main {
 		int n = sc.nextInt();
 
 		int cnt = 0;
-		for (int i = 1; i <= n; i++)
-			for (int j = 1; j <= i; j++)
-				if (i * j <= n)
-					cnt++;
+		for (int i = 1; i <= n; i++){
+            for (int j = i; i*j <= n; j++){
+                cnt++;
+            }
+        }
+			
+				
+        
 		System.out.println(cnt);
 
 	}
