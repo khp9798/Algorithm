@@ -21,11 +21,10 @@ public class Main {
         // 걸린 시간
         int t = Integer.parseInt(br.readLine());
         
-        p = (p+t)%(w*2);
-        q = (q+t)%(h*2);
+        p = w-Math.abs(w-(p+t)%(w*2));
+        q = h-Math.abs(h-(q+t)%(h*2));
         
-        if(p>=w) p= 2*w-p;
-        if(q>=h) q = 2*h-q;
+        
         System.out.println(p+" "+q);
 
 	}
