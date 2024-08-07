@@ -30,7 +30,7 @@ public class Main {
 		for(int r=0; r<student.length; r++) {
 			for(int c=0; c<student[0].length; c++) {
 				count+=student[r][c]/k;
-				if(student[r][c]%2!=0) {
+				if(student[r][c]%k!=0) {
 					count++;
 				}
 			}
