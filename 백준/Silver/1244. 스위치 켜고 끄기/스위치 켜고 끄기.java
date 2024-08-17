@@ -1,77 +1,64 @@
-import java.util.Arrays;
-import java.util.Scanner;
+import java.io.BufferedReader;
+import java.io.InputStreamReader;
+import java.util.StringTokenizer;
 
 public class Main {
 
-	public static void main(String[] args) {
-		Scanner sc = new Scanner(System.in);
-
-		// 스위치 갯수 입력 받기
-		int N = sc.nextInt();
-		int[] switch1 = new int[N];
-
-		// 스위치 상태 입력 받기
-		for (int i = 0; i < switch1.length; i++) {
-			switch1[i] = sc.nextInt();
+	public static void main(String[] args) throws Exception{
+		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+		
+		//스위치의 갯수
+		int N = Integer.parseInt(br.readLine());
+		
+		//스위치 상태를 저장할 배열  0번 인덱스는 안씀
+		int[] sw = new int[N+1];
+		
+		StringTokenizer st = new StringTokenizer(br.readLine());
+		//스위치 상태 입력 받기
+		for(int i=1; i<N+1; i++) {
+			sw[i] = Integer.parseInt(st.nextToken());
 		}
-
-		// 학생 수 입력 받기
-		int studentnum = sc.nextInt();
-
-		// 학생 수만큼 스위치 변경 활동함.
-		for (int i = 0; i < studentnum; i++) {
-
-			// 학생의 성별과 받은 수 입력
-			int gender = sc.nextInt();
-			int getnum = sc.nextInt();
-
-			// 성별이 1이면 남자, 2이면 여자
-
-			// 성별이 남자일 때
-			if (gender == 1) {
-				for (int j = 0; j < switch1.length; j++) {
-					if ((j + 1) % getnum == 0) {
-						switch1[j] = switch1[j] == 1 ? 0 : 1;
-
-					}
+		
+		
+		//학생 수 입력
+		int studentcnt = Integer.parseInt(br.readLine());
+		
+		for(int s=0; s<studentcnt; s++) {
+			st = new StringTokenizer(br.readLine());
+			
+			int gender = Integer.parseInt(st.nextToken());
+			int num = Integer.parseInt(st.nextToken());
+			
+			//남자라면
+			if(gender==1) {
+				for(int i=num; i<N+1; i+=num) {
+					sw[i] = sw[i] == 1 ? 0:1;
 				}
 			}
-			// 성별이 여자일 때
+			//여자라면 num으로 받은 번호 중심으로 양 옆이 대칭이 아닐 때까지 간다.
 			else {
-
-				// 좌우 탐색 인덱스 자기자신으로 초기화
-				int leftidx = getnum - 1;
-				int rightidx = getnum - 1;
-
-				// 자기 자신은 좌우가 대칭이든 아니든 바꾸니까 일단 바꿈
-				switch1[leftidx] = switch1[leftidx] == 1 ? 0 : 1;
-
-				// 좌우 탐색하는 범위는 아무리 커도 배열크기의 반보다 작음.
-				for (int j = 1; j < switch1.length / 2; j++) {
-
-					// 좌우 탐색하는데 범위를 넘어사면 break;
-					if (rightidx + j >= switch1.length || leftidx - j < 0)
-						break;
-
-					// 좌우 탐색했는데 대칭일 때
-					if (switch1[leftidx - j] == switch1[rightidx + j]) {
-						switch1[leftidx - j] = switch1[leftidx - j] == 1 ? 0 : 1;
-						switch1[rightidx + j] = switch1[rightidx + j] == 1 ? 0 : 1;
-					}
-					// 대칭이 아닐 때
-					else
-						break;
-
+				//일단 num은 바꿔야됨
+				sw[num] = sw[num] == 1? 0:1;
+				
+				//탐색범위
+				int a=1;
+				while(1<=num-a && num+a<N+1&& sw[num-a]==sw[num+a]) {
+					sw[num-a] = sw[num-a] == 1? 0:1;
+					sw[num+a] = sw[num+a] == 1? 0:1;
+					a++;
 				}
-
 			}
+			
+			
+			
 		}
-
-		// 한 줄에 20개씩 출력
-		for (int i = 0; i < switch1.length; i++) {
-			System.out.print(switch1[i] + " ");
-			if ((i + 1) % 20 == 0)
+		
+		for(int i=1; i<N+1; i++) {
+			System.out.print(sw[i]+" ");
+			if(i%20==0) {
 				System.out.println();
+			}
 		}
 	}
+
 }
