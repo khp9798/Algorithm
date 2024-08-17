@@ -67,11 +67,11 @@ public class Main {
 			}
 		}
 
-		dfs();
+		bfs();
 		
 	}
 	
-	static void dfs() {
+	static void bfs() {
 		int day = 0;
 		
 		while(!queue.isEmpty()) {
