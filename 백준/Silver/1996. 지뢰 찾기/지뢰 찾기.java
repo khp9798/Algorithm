@@ -32,7 +32,7 @@ public class Main {
 			for (int c = 0; c < N; c++) {
 				if (map1[r][c] == '.') {
 					int sum = 0;
-					String str = "";
+					StringBuilder sb = new StringBuilder();
 					for (int d = 0; d < dr.length; d++) {
 						int nr = r + dr[d];
 						int nc = c + dc[d];
@@ -45,8 +45,8 @@ public class Main {
 					if (sum >= 10) {
 						res[r][c] = 'M';
 					} else {
-						str += sum;
-						res[r][c] = str.charAt(0);
+						sb.append(sum);
+						res[r][c] = sb.charAt(0);
 					}
 				} else {
 					res[r][c] = '*';
