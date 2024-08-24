@@ -13,8 +13,7 @@ public class Main {
 	static int M;
 
 	static char[][] map;
-	static List<Character> visited = new ArrayList<>();
-	static boolean [][] visit;
+	static boolean [] visited = new boolean['Z'-'0'+1];
 
 	public static void main(String[] args) throws IOException {
 		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
@@ -25,7 +24,7 @@ public class Main {
 		M = Integer.parseInt(st.nextToken());
 
 		map = new char[N][M];
-		visit = new boolean[N][M];
+		
 
 		for (int r = 0; r < N; r++) {
 			String[] str = br.readLine().split("");
@@ -45,26 +44,17 @@ public class Main {
 	
 	static int res = 0;
 	static void dfs(int r, int c, int count) {
-		visit[r][c] = true;
-		visited.add(map[r][c]);
+		visited[map[r][c]-'0'] = true;
 		res = Math.max(res, count);
 //		System.out.println(r+", "+c+" = "+map[r][c]);
 		
-		out : for(int d=0; d<4; d++) {
+		for(int d=0; d<4; d++) {
 			int nr = r+dr[d];
 			int nc = c+dc[d];
 			
-			if(0<=nr &&nr<N && 0<=nc && nc<M && !visit[nr][nc]) {
-				for(int i=0; i<visited.size(); i++) {
-					if(visited.get(i)==map[nr][nc]) {
-						continue out;
-					}
-				}
-				
-				
+			if(0<=nr &&nr<N && 0<=nc && nc<M && !visited[map[nr][nc]-'0']) {
 				dfs(nr,nc,count+1);
-				visit[nr][nc] = false;
-				visited.remove(Character.valueOf(map[nr][nc]));
+				visited[map[nr][nc]-'0'] = false;
 			}
 		}
 
