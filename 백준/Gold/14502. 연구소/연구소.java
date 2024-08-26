@@ -67,13 +67,12 @@ public class Main {
 	static class Virus {
 		int r;
 		int c;
-		int viruscnt;
 
-		public Virus(int r, int c, int viruscnt) {
+		public Virus(int r, int c) {
 			super();
 			this.r = r;
 			this.c = c;
-			this.viruscnt = viruscnt;
+			
 		}
 
 	}
@@ -91,7 +90,7 @@ public class Main {
 		for (int r = 0; r < N; r++) {
 			for (int c = 0; c < M; c++) {
 				if (map[r][c] == 2 && !visited[r][c]) {
-					queue.add(new Virus(r, c, 1));
+					queue.add(new Virus(r, c));
 					visited[r][c] = true;
 					res++;
 				}
@@ -109,7 +108,7 @@ public class Main {
 				if(0<=nr && nr<N && 0<=nc && nc<M && !visited[nr][nc] && map[nr][nc]==0) {
 					visited[nr][nc] = true;
 					res++;
-					queue.add(new Virus(nr,nc,v.viruscnt));
+					queue.add(new Virus(nr,nc));
 				}
 			}
 		}
