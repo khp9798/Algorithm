@@ -4,21 +4,14 @@ import java.io.InputStreamReader;
 import java.util.StringTokenizer;
 
 public class Main {
-
-	// 세로 크기
+    
 	static int N;
-
-	static int Start = 1;
-	static int End = 1;
 
 	public static void main(String[] args) throws IOException {
 		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
-
 		StringTokenizer st = new StringTokenizer(br.readLine());
 
 		N = Integer.parseInt(st.nextToken());
-
-		End = (int) (End * Math.pow(10, N)) - 1;
 
 		Sosu(2,1);
 		Sosu(3,1);
@@ -27,11 +20,6 @@ public class Main {
 		
 		
 	}
-
-	static boolean res = false;
-
-	static int [] a = {2,3,5,7};
-	static int [] last = {1,3,5,9};
 	
 	static void Sosu(int num, int jaricnt) {
 
