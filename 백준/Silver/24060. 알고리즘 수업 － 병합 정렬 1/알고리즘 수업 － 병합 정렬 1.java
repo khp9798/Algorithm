@@ -9,7 +9,7 @@ public class Main {
 
 	static int[] A;
 	static int[] tmp;
-	static List<Integer> KList = new ArrayList<>();
+	static int K;
 
 	public static void main(String[] args) throws IOException {
 		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
@@ -20,7 +20,8 @@ public class Main {
 
 		A = new int[N];
 		tmp = new int[A.length];
-		int K = Integer.parseInt(st.nextToken());
+		
+		K = Integer.parseInt(st.nextToken());
 
 		st = new StringTokenizer(br.readLine());
 		for (int i = 0; i < N; i++) {
@@ -29,13 +30,12 @@ public class Main {
 
 		MergeSort(0, N - 1);
 
-		try {
-			System.out.println(KList.get(K - 1));
-		} catch (IndexOutOfBoundsException e) {
-			System.out.println(-1);
-		}
+		System.out.println(res);
 
 	}
+	
+	static int count = 0;
+	static int res = -1;
 
 	private static void MergeSort(int left, int right) {
 		if (left < right) {
@@ -68,7 +68,11 @@ public class Main {
 
 		for (int i = left; i <= right; i++) {
 			A[i] = tmp[i];
-			KList.add(tmp[i]);
+			count++;
+			if(count==K) {
+				res = A[i];
+			}
+			
 		}
 	}
 
