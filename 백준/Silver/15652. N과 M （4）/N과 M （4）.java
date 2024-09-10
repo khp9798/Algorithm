@@ -1,45 +1,45 @@
-
-
 import java.util.Scanner;
 
-public class Main {
+class Main {
 
 	static int N;
 	static int M;
-
-
-	static int[] res;
+	static boolean[] visited;
+	static int[] sel;
+	static StringBuilder sb = new StringBuilder();
 
 	public static void main(String[] args) {
+
 		Scanner sc = new Scanner(System.in);
 
 		N = sc.nextInt();
-		M = sc.nextInt();
-		
-		res = new int[M];
 
-		sunyeol(1, 0);
+		M = sc.nextInt();
+
+		visited = new boolean[N + 1];
+
+		sel = new int[M];
+
+		dfs(1,0);
+		
+		System.out.println(sb.toString());
 
 	}
 
-	private static void sunyeol(int start, int depth) {
+	private static void dfs(int idx,int depth) {
 		if (depth == M) {
-			for (int i = 0; i < M; i++) {
-				System.out.print(res[i] + " ");
+			for (int i : sel) {
+				sb.append(i+" ");
 			}
+			sb.append("\n");
 
-			System.out.println();
 			return;
 		}
 
-		if (start > N) {
-			return;
-		}
+		for (int i = idx; i <= N; i++) {
 
-		for (int i = start; i < N + 1; i++) {
-
-			res[depth] = i;
-			sunyeol(i, depth + 1);
+			sel[depth] = i;
+			dfs(i,depth + 1);
 
 		}
 
