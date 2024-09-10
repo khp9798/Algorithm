@@ -1,59 +1,55 @@
+
 import java.util.Scanner;
 
-public class Main {
 
-	static int K;
-	static int[] arr;
-	static boolean[] visited;
+class Main {
+
+	static int N;
+
+	static boolean[] select;
+	static int[] num;
+	static StringBuilder sb = new StringBuilder();
 
 	public static void main(String[] args) {
+
 		Scanner sc = new Scanner(System.in);
 
-		//고른 수 의 개수
-		K = sc.nextInt();
+		while ((N = sc.nextInt()) != 0) {
+			num = new int[N];
 
-		while(K!=0) {
-			arr = new int[K];
-			visited = new boolean[K];
-			
-			for(int i=0; i<K; i++) {
-				arr[i] = sc.nextInt();
+			for (int i = 0; i < N; i++) {
+				num[i] = sc.nextInt();
+
 			}
+			select = new boolean[N];
 			
 			
-			//kC6을 할거임
-			
-			comb(0,0);
+			dfs(0,0);
 			System.out.println();
-			K= sc.nextInt();
 		}
-		
+
 
 	}
 
-	static void comb(int start,int depth) {
+	private static void dfs(int idx,int depth) {
 		if(depth==6) {
-			for(int i=0; i<visited.length; i++) {
-				if(visited[i]) {
-					System.out.print(arr[i]+" ");
+			for(int i=0; i<N; i++) {
+				if(select[i]) {
+					System.out.print(num[i]+" ");
 				}
 			}
 			System.out.println();
 			return;
 		}
-		if(start>=K) {
-			return;
+		
+		
+		for(int i=idx; i<N; i++) {
+			if(!select[i]) {
+				select[i] = true;
+				dfs(i,depth+1);
+				select[i] = false;
+			}
 		}
-		
-		
-		
-		visited[start] = true;
-		comb(start+1,depth+1);
-		visited[start] = false;
-		comb(start+1,depth);
-		
 	}
-	
-	
 
 }
