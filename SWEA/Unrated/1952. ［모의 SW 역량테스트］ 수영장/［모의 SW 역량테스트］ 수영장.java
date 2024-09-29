@@ -1,64 +1,47 @@
-
-
+import java.util.Arrays;
 import java.util.Scanner;
 
 public class Solution {
 
-	
-	static int[] cost;
-	static int[] plan;
-	static int res;
-	
 	public static void main(String[] args) {
 		Scanner sc = new Scanner(System.in);
 		
-		int tc = sc.nextInt();
+		int T= sc.nextInt();
 		
-		for(int t=1; t<=tc; t++) {
-			cost = new int[4];
+		for(int t=1; t<=T; t++) {
+			System.out.print("#"+t+" ");
 			
-			plan = new int[13];
+			int [] dp = new int[13];
 			
+			int [] cost = new int[4];
 			
 			for(int i=0; i<4; i++) {
 				cost[i] = sc.nextInt();
 			}
 			
-			
+			int [] plan = new int[13];
 			
 			for(int i=1; i<=12; i++) {
 				plan[i] = sc.nextInt();
 			}
 			
 			
-			
-			
-			res = Integer.MAX_VALUE;
-			
-			dfs(1,0);
-			
-			System.out.println("#"+t+" "+res);
-		}
+			for(int i=1; i<=12; i++) {
+				dp[i] = dp[i-1]+plan[i]*cost[0];
 
-	}
-
-	private static void dfs(int month, int sum) {
-		if(res<=sum) return;
-		
-		if(month>12) {
-			res = Math.min(res,sum);
-			return;
+				dp[i] = Math.min(dp[i-1]+cost[1], dp[i]);
+				
+				if(i>=3) {
+					dp[i] = Math.min(dp[i-3]+cost[2], dp[i]);					
+				}
+				
+				if(i>=12) {
+					dp[i] = Math.min(dp[i-12]+cost[3], dp[i]);
+				}
+			}
+			
+			System.out.println(dp[12]);
 		}
-		
-		
-		
-		dfs(month+1,sum+cost[0]*plan[month]);
-		
-		dfs(month+1,sum+cost[1]);
-		
-		dfs(month+3,sum+cost[2]);
-		
-		dfs(month+12, sum+cost[3]);
 	}
 
 }
