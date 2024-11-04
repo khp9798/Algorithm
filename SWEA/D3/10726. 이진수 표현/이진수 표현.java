@@ -1,26 +1,40 @@
 
-
-import java.util.Scanner;
-
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.util.StringTokenizer;
 
 public class Solution {
 
-	public static void main(String[] args) {
-		Scanner sc = new Scanner(System.in);
-				
-		int T = sc.nextInt();
+	public static void main(String[] args) throws NumberFormatException, IOException {
+		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
 		
-		for(int t=1; t<=T; t++) {
-			//마지막 N 비트가 모두 1로 켜져있는지
-			int N = sc.nextInt();
-			
-			int M = sc.nextInt();
-			
+		int tc = Integer.parseInt(br.readLine());
+		
+		for(int t=1; t<=tc; t++) {
 			System.out.print("#"+t+" ");
-			System.out.println((M&((1<<N)-1))==((1<<N)-1) ? "ON" :"OFF");
+			
+			StringTokenizer st = new StringTokenizer(br.readLine());
+			int n = Integer.parseInt(st.nextToken());
+			int m = Integer.parseInt(st.nextToken());
+			
+			
+			boolean check = true;
+			
+			for(int i=0; i<n; i++) {
+				
+				if((m & (1<<i)) == 0) {
+					check = false;
+					break;
+				}
+			}
+			
+			if(check) {
+				System.out.println("ON");
+			}else {
+				System.out.println("OFF");
+			}
 		}
-		
-
 	}
 
 }
