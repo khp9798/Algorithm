@@ -1,51 +1,56 @@
+import java.io.*;
+import java.util.*;
+
+public class Main{
+
+    static int N;
+    static int M;
+
+    static int [] result;
+
+    static StringBuilder sb = new StringBuilder();
+
+    public static void main(String[] args) throws IOException{
+        
+        BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+
+        StringTokenizer st = new StringTokenizer(br.readLine());
+
+        
+
+        //1~N까지의 수
+        N = Integer.parseInt(st.nextToken());
+
+        //중복 없이 M개 고름
+        M = Integer.parseInt(st.nextToken());
+
+        
+        //중복되는 수열을 여러번 출력 x, 각 수열은 공백으로 구분해서 출력
+        //수열은 사전 순으로 증가하는 순서로 출력
 
 
-import java.io.BufferedWriter;
-import java.io.IOException;
-import java.io.OutputStreamWriter;
-import java.util.Scanner;
+        result = new int[M];
 
-public class Main {
+        dfs(1,0);
 
-	static int N;
-	static int M;
+        System.out.println(sb.toString());
 
-	static int[] res;
-	static BufferedWriter bw = new BufferedWriter(new OutputStreamWriter(System.out));
+    }
 
-	public static void main(String[] args) throws IOException {
-		Scanner sc = new Scanner(System.in);
-		
-		N = sc.nextInt();
-		M = sc.nextInt();
-		
-		res = new int[M];
+    public static void dfs(int num, int depth){
 
-		sunyeol(1, 0);
-		
-		bw.flush();
-		bw.close();
+        if(depth == M){
+            for (int res : result){
+                sb.append(res+" ");
+            }
+            sb.append("\n");
+            return;
+        }
 
-	}
+        for(int i=num; i<=N; i++){
+                result[depth] = i;
+                dfs(num,depth+1);
+        }
 
-	private static void sunyeol(int start, int depth) throws IOException {
-		if (depth == M) {
-			for (int i = 0; i < M; i++) {
-				bw.write(res[i] + " ");
-			}
-
-			bw.write("\n");
-			return;
-		}
-
-
-		for (int i = 1; i < N + 1; i++) {
-
-			res[depth] = i;
-			sunyeol(i, depth + 1);
-
-		}
-
-	}
-
+    }
 }
