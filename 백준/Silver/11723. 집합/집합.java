@@ -1,57 +1,45 @@
-import java.util.*;
-import java.io.*;
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.util.StringTokenizer;
 
-
-public class Main {
-
-	static int M;
-	public static void main(String[] args) throws IOException{
-		// TODO Auto-generated method stub
+public class Main{
+	public static void main(String[] args) throws IOException {
 		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+		int M = Integer.parseInt(br.readLine());
 		
-		M = Integer.parseInt(br.readLine());
-		
-		Set<Integer> set = new HashSet<>();
-		
-		StringBuilder sb = new StringBuilder();
-		
-		
-		for(int i=0; i<M; i++) {
+		StringBuffer sb = new StringBuffer();
+		int set = 0;
+		for (int i = 0; i < M; i++) {
 			StringTokenizer st = new StringTokenizer(br.readLine());
-			
 			String command = st.nextToken();
 			
-			int num = 0;
-			if(!(command.equals("empty") || command.equals("all")) ) {
-				num = Integer.parseInt(st.nextToken());
-			}
+			int input = -1;
 			switch(command) {
-				case "add" : set.add(num);
-						break;
-				case "remove" : set.remove(num);
-						break;
-				case "check" : sb.append(set.contains(num) ? 1 : 0).append("\n");
-						break;
-				case "toggle" : if(set.contains(num)) {
-					set.remove(num);					
-				}else {
-					set.add(num);
-				}
-					break;
-				case "all" : for(int j=1; j<=20; j++) {
-					set.add(j);
-				}
-					break;
-				default : set.clear();
-					break;
+			case "add":
+				input = Integer.parseInt(st.nextToken());
+				set = set | (1 << input);
+				break;
+			case "remove":
+				input = Integer.parseInt(st.nextToken());
+				set = set & ~(1 << input);
+				break;
+			case "check":
+				input = Integer.parseInt(st.nextToken());
+				sb.append(((set & (1 << input)) > 0) ? "1\n" : "0\n");
+				break;
+			case "toggle":
+				input = Integer.parseInt(st.nextToken());
+				set = set ^ (1 << input);
+				break;
+			case "all":
+				set = (1 << 21) - 1;
+				break;
+			case "empty":
+				set = 0;
+				break;
 			}
-			
-			
-			
-			
 		}
-		
-		System.out.println(sb.toString());
+		System.out.print(sb.toString());
 	}
-
 }
