@@ -38,6 +38,7 @@ public class Main {
 			}
 		}
 
+		StringBuilder sb = new StringBuilder();
 		// 합을 구해야 하는 구간이 M 주어짐.
 		for (int i = 0; i < m; i++) {
 			st = new StringTokenizer(br.readLine());
@@ -48,8 +49,10 @@ public class Main {
 			int x2 = Integer.parseInt(st.nextToken());
 			int y2 = Integer.parseInt(st.nextToken());
 
-			System.out.println(D[x2][y2] - D[x2][y1 - 1] - D[x1 - 1][y2] + D[x1 - 1][y1 - 1]);
+			sb.append(D[x2][y2] - D[x2][y1 - 1] - D[x1 - 1][y2] + D[x1 - 1][y1 - 1]).append("\n");
 		}
+		
+		System.out.println(sb.toString());
 
 	}
 
