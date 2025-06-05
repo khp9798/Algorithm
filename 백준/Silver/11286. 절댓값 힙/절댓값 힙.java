@@ -4,9 +4,7 @@ public class Main {
 
 	public static void main(String[] args) {
 
-		PriorityQueue<Integer> pq = new PriorityQueue<>((o1, o2) -> {
-			int x = Integer.parseInt(o1.toString());
-			int y = Integer.parseInt(o2.toString());
+		PriorityQueue<Integer> pq = new PriorityQueue<>((x, y) -> {
 
 			if (Math.abs(x) < Math.abs(y)) {
 				return -1;
