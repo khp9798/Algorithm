@@ -3,29 +3,29 @@ import java.util.*;
 class Solution {
     boolean solution(String s) {
         boolean answer = true;
-        
-        Stack<String> st = new Stack<>();
 
+        // [실행] 버튼을 누르면 출력 값을 볼 수 있습니다.
+        System.out.println("Hello Java");
+        
+        Stack<Character> stack = new Stack<>();
         for(int i=0; i<s.length(); i++){
-            if(s.charAt(i) == ')' && st.size()>0 && st.peek().equals("(")){
-                st.pop();
-                answer = true;
+            char c = s.charAt(i);
+            
+            if(c=='('){
+                stack.add(c);
+            }else{
+                if(stack.isEmpty()){
+                    return false;
+                }
+                if(stack.peek() == '('){
+                    stack.pop();
+                }
             }
-            else if(s.charAt(i) == '('){
-                st.push("(");
-            }
-            else{
-                st.push(")");
-                answer=false;
-            }
-        
+            
         }
         
         
-        if(st.size()>0){
-            System.out.println("여기 안들림?");
-            answer=false;
-        }
+        if(!stack.isEmpty()) return false;
 
         return answer;
     }
