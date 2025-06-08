@@ -4,25 +4,23 @@ public class Solution {
     public int[] solution(int []arr) {
         int[] answer = {};
         
-        List<Integer> list = new ArrayList<>();
+        Deque<Integer> d = new LinkedList<>();
         
-        list.add(arr[0]);
-        
-        // [실행] 버튼을 누르면 출력 값을 볼 수 있습니다.
-        System.out.println("Hello Java");
-        
-        for(int i=1; i<arr.length; i++){
-            if(arr[i-1]!=arr[i]){
-                list.add(arr[i]);
+        for(int i=0; i<arr.length; i++){
+            int num = arr[i];
+            
+            if(!d.isEmpty() && d.getLast() == num){
+                d.removeLast();
             }
+            
+            d.add(num);
         }
         
-        answer = new int[list.size()];
+        answer = new int[d.size()];
         
         for(int i=0; i<answer.length; i++){
-            answer[i] = list.get(i);
+            answer[i] = d.poll();
         }
-
         return answer;
     }
 }
