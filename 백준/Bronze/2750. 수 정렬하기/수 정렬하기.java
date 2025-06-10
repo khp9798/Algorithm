@@ -1,23 +1,43 @@
-import java.util.Arrays;
-import java.util.Scanner;
+
+
+import java.util.*;
 
 public class Main {
+	
+	static int[] arr;
 
 	public static void main(String[] args) {
+		// TODO Auto-generated method stub
 		Scanner sc = new Scanner(System.in);
-
-		int N = sc.nextInt();
-
-		int[] arr = new int[N];
-		for (int i = 0; i < N; i++) {
+		
+		arr = new int[sc.nextInt()];
+		
+		for(int i=0; i<arr.length ;i++) {
 			arr[i] = sc.nextInt();
 		}
-
-		Arrays.sort(arr);
 		
-		for (int i : arr) {
-			System.out.println(i);
+		
+		for(int i=arr.length-1; i>=0; i--) {
+			for(int j=0; j<i; j++) {
+				buble(j);
+			}
 		}
+		
+		
+		for(int i=0; i<arr.length; i++) {
+			System.out.println(arr[i]);
+		}
+	}
+	
+	
+	public static void buble(int idx) {
+		if(arr[idx] > arr[idx+1]) {
+			int temp = arr[idx+1];
+			arr[idx+1] = arr[idx];
+			arr[idx] = temp;
+		}
+		
+//		System.out.println(Arrays.toString(arr));
 	}
 
 }
