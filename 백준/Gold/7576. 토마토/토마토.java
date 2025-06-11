@@ -1,118 +1,81 @@
 
 
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStreamReader;
-import java.util.LinkedList;
-import java.util.Queue;
-import java.util.StringTokenizer;
+import java.util.*;
+import java.io.*;
 
 public class Main {
 
-	static int[][] box;
-	
-
+	static int n, m;
+	static int[][] bucket;
+	static boolean[][] vis;
 	static int[] dr = { -1, 1, 0, 0 };
 	static int[] dc = { 0, 0, -1, 1 };
-
-	
-	static class tomato{
-		int r;
-		int c;
-		int day;
-		
-		public tomato(int r, int c, int day) {
-			this.r = r;
-			this.c = c;
-			this.day = day;
-		}
-		
-		
-	}
-	
-	static Queue<tomato> queue = new LinkedList<>();
+	static Queue<int[]> q = new LinkedList<>();
 
 	public static void main(String[] args) throws IOException {
+
 		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
 
 		StringTokenizer st = new StringTokenizer(br.readLine());
 
-		int M = Integer.parseInt(st.nextToken());
+		n = Integer.parseInt(st.nextToken());
+		m = Integer.parseInt(st.nextToken());
 
-		int N = Integer.parseInt(st.nextToken());
+		bucket = new int[m][n];
+		vis = new boolean[m][n];
 
-		box = new int[N][M];
-
-		for (int r = 0; r < N; r++) {
+		for (int r = 0; r < m; r++) {
 			st = new StringTokenizer(br.readLine());
-			for (int c = 0; c < M; c++) {
-				box[r][c] = Integer.parseInt(st.nextToken());
-			}
-		}
-
-		for (int r = 0; r < N; r++) {
-			for (int c = 0; c < M; c++) {
-				if (box[r][c] == 1) {
-					queue.add(new tomato(r,c,0));
-					
+			for (int c = 0; c < n; c++) {
+				bucket[r][c] = Integer.parseInt(st.nextToken());
+				if (bucket[r][c] == 1) {
+					vis[r][c] = true;
+					q.add(new int[] { r, c, 0 });
 				}
 			}
 		}
-		
-		bfs();
+
+		System.out.println(bfs());
 
 	}
 
-	
-	static int result = 0;
-	
-	static void bfs() {
-		
-		
-		
-		
-		while(!queue.isEmpty()) {
-			tomato t = queue.poll();
-			
-			int row = t.r;
-			int col = t.c;
-			
-			int day = t.day;
-			
-			result = day;
-			
+	static int bfs() {
+		int day = -1;
+		while (!q.isEmpty()) {
+			int[] rc = q.poll();
+
+			int curR = rc[0];
+			int curC = rc[1];
+
+			day = Math.max(day, rc[2]);
+
 			for (int d = 0; d < 4; d++) {
-				int nr = row + dr[d];
-				int nc = col + dc[d];
+				int nr = curR + dr[d];
+				int nc = curC + dc[d];
 
-				
-				if(0<=nr && nr<box.length && 0<=nc && nc<box[0].length
-						&& box[nr][nc]==0) {
-					box[nr][nc] = 1;
-					queue.add(new tomato(nr,nc,day+1));
-				}
+				if (nr < 0 || nc < 0 || nr >= m || nc >= n)
+					continue;
+				if (vis[nr][nc] || bucket[nr][nc] == -1)
+					continue;
+
+				vis[nr][nc] = true;
+				q.add(new int[] { nr, nc, rc[2] + 1 });
 			}
 		}
-		
-		if(clear()) {
-			System.out.println(result);
-		}else {
-			System.out.println(-1);
-		}
+
+		if (check())
+			return day;
+		return -1;
 	}
-	
-	
-	static boolean clear() {
-		
-		for(int r=0; r<box.length; r++) {
-			for(int c=0; c<box[0].length; c++) {
-				if(box[r][c]==0) {
+
+	static boolean check() {
+		for (int r = 0; r < m; r++) {
+			for (int c = 0; c < n; c++) {
+				if (bucket[r][c] != -1 && !vis[r][c])
 					return false;
-				}
 			}
 		}
-		
+
 		return true;
 	}
-
 }
