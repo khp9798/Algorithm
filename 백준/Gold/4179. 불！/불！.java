@@ -1,146 +1,82 @@
-import java.io.*;
 import java.util.*;
+import java.io.*;
 
-class Main {
+public class Main {
 
-	static int R;
-	static int C;
+	static int R, C;
+    static char[][] map;
+    static int[][] fireTime, jihoonTime;
+    static int[] dr = {-1,1,0,0}, dc = {0,0,-1,1};
 
-	static char[][] map;
-	static boolean[][] visited;
-	static boolean[][] fired;
+    public static void main(String[] args) throws IOException {
+        BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+        StringTokenizer st = new StringTokenizer(br.readLine());
+        R = Integer.parseInt(st.nextToken());
+        C = Integer.parseInt(st.nextToken());
 
-	static class jihun {
-		int r;
-		int c;
-		int time;
+        map = new char[R][C];
+        fireTime   = new int[R][C];
+        jihoonTime = new int[R][C];
 
-		public jihun(int r, int c, int time) {
-			super();
-			this.r = r;
-			this.c = c;
-			this.time = time;
-		}
+        Queue<int[]> fireQ = new LinkedList<>();
+        Queue<int[]> jihQ  = new LinkedList<>();
 
-		@Override
-		public String toString() {
-			return "jihun [r=" + r + ", c=" + c + ", time=" + time + "]";
-		}
-		
-		
+        for (int r = 0; r < R; r++) {
+            String line = br.readLine();
+            for (int c = 0; c < C; c++) {
+                map[r][c] = line.charAt(c);
+                if (map[r][c] == 'F') {
+                    fireQ.add(new int[]{r, c});
+                    fireTime[r][c] = 1;
+                }
+                if (map[r][c] == 'J') {
+                    jihQ.add(new int[]{r, c});
+                    jihoonTime[r][c] = 1;
+                }
+            }
+        }
 
-	}
+        // 1) 불 BFS
+        while (!fireQ.isEmpty()) {
+            int[] cur = fireQ.poll();
+            for (int d = 0; d < 4; d++) {
+                int nr = cur[0] + dr[d];
+                int nc = cur[1] + dc[d];
+                if (nr < 0 || nc < 0 || nr >= R || nc >= C) continue;
+                if (map[nr][nc] == '#' || fireTime[nr][nc] != 0) continue;
 
-	public static void main(String[] args) throws IOException {
-		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+                fireTime[nr][nc] = fireTime[cur[0]][cur[1]] + 1;
+                fireQ.add(new int[]{nr, nc});
+            }
+        }
 
-		StringTokenizer st = new StringTokenizer(br.readLine());
+        // 2) 지훈이 BFS
+        while (!jihQ.isEmpty()) {
+            int[] cur = jihQ.poll();
+            int y = cur[0], x = cur[1];
 
-		R = Integer.parseInt(st.nextToken());
-		C = Integer.parseInt(st.nextToken());
+            // 가장자리 탈출 확인
+            if (y == 0 || y == R-1 || x == 0 || x == C-1) {
+                System.out.println(jihoonTime[y][x]);
+                return;
+            }
 
-		map = new char[R][C];
-		visited = new boolean[R][C];
-		fired = new boolean[R][C];
+            for (int d = 0; d < 4; d++) {
+                int ny = y + dr[d];
+                int nx = x + dc[d];
+                if (ny < 0 || nx < 0 || ny >= R || nx >= C) continue;
+                if (map[ny][nx] == '#' || jihoonTime[ny][nx] != 0) continue;
 
-		for (int r = 0; r < R; r++) {
-			map[r] = br.readLine().toCharArray();
-		}
+                int arriveTime = jihoonTime[y][x] + 1;
+                // 불이 오는 시간보다 늦게 도착해야 하거나, 불이 아예 안 오는 칸
+                if (fireTime[ny][nx] != 0 && fireTime[ny][nx] <= arriveTime) continue;
 
-		for (int r = 0; r < R; r++) {
-			for (int c = 0; c < C; c++) {
-				if (map[r][c] == 'J') {
-					bfs(r, c);
-					break;
-				}
-			}
-		}
+                jihoonTime[ny][nx] = arriveTime;
+                jihQ.add(new int[]{ny, nx});
+            }
+        }
 
-		System.out.println(res != -1 ? res : "IMPOSSIBLE");
-
-	}
-
-	static int[] dr = { -1, 1, 0, 0 };
-	static int[] dc = { 0, 0, -1, 1 };
-
-	static int res = -1;
-
-	private static void bfs(int r, int c) {
-		Queue<jihun> q = new LinkedList<>();
-		q.add(new jihun(r, c, 0));
-		visited[r][c] = true;
-
-		while (!q.isEmpty()) {
-			fire();
-
-//			for (int i = 0; i < R; i++) {
-//				for (int j = 0; j < C; j++) {
-//					System.out.print(map[i][j] + " ");
-//				}
-//				System.out.println();
-//			}
-//
-//			System.out.println();
-			
-			int a = q.size();
-			for(int i=0; i<a; i++) {
-				jihun j = q.poll();
-
-				for (int d = 0; d < 4; d++) {
-					int nr = j.r + dr[d];
-					int nc = j.c + dc[d];
-
-					if (nr < 0 || nc < 0 || nr >= R || nc >= C) {
-						res = j.time + 1;
-						return;
-					}
-					else if (map[nr][nc] == '#')
-						continue;
-					else if (map[nr][nc] == 'F')
-						continue;
-					else if( visited[nr][nc]) continue;
-
-					visited[nr][nc] = true;
-					map[nr][nc] = 'j';
-					q.add(new jihun(nr, nc, j.time + 1));
-				}
-			}
-			
-		}
-
-	}
-
-	private static void fire() {
-		
-		Queue<int[]> q = new LinkedList<>();
-		for (int r = 0; r < R; r++) {
-			for (int c = 0; c < C; c++) {
-				if (map[r][c] == 'F' && !fired[r][c]) {
-					fired[r][c] = true;
-					q.add(new int[] { r, c });
-				}
-			}
-		}
-
-		while (!q.isEmpty()) {
-			int[] arr = q.poll();
-
-			for (int d = 0; d < 4; d++) {
-				int nr = arr[0] + dr[d];
-				int nc = arr[1] + dc[d];
-
-				if (nr < 0 || nc < 0 || nr >= R || nc >= C)
-					continue;
-				else if (fired[nr][nc])
-					continue;
-				else if (map[nr][nc] == '#')
-					continue;
-				else if (map[nr][nc] == 'F')
-					continue;
-
-				map[nr][nc] = 'F';
-			}
-		}
-
-	}
+        // 탈출 못 함
+        System.out.println("IMPOSSIBLE");
+    }
 }
