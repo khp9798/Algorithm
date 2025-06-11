@@ -1,105 +1,66 @@
-import java.io.*;
+
+
 import java.util.*;
 
 public class Main {
 
-    static int N;
-    static int M;
+	static int[][] miro;
+	static boolean[][] vis;
+	static int[] dr = { -1, 1, 0, 0 };
+	static int[] dc = { 0, 0, -1, 1 };
 
-    static int [][] map;
+	static int n, m;
 
-    static boolean [][] visited;
+	public static void main(String[] args) {
+		Scanner sc = new Scanner(System.in);
 
-    static int result = 0;
+		n = sc.nextInt();
+		m = sc.nextInt();
 
-    static class node{
-        int r;
-        int c;
-        int count;
+		miro = new int[n][m];
+		vis = new boolean[n][m];
 
+		for (int r = 0; r < n; r++) {
+			String str = sc.next();
 
-        node(int r, int c, int count){
-            this.r = r;
-            this.c = c;
-            this.count = count;
-        }
-    }
+			for (int c = 0; c < m; c++) {
+				miro[r][c] = str.charAt(c) - '0';
+			}
+		}
 
+		System.out.println(bfs(0, 0));
 
-    static int [] dr = {-1,1,0,0};
-    static int [] dc = {0,0,-1,1};
+	}
 
+	static int bfs(int r, int c) {
+		Queue<int[]> q = new LinkedList<>();
+		vis[r][c] = true;
+		q.add(new int[] { r, c, 1 });
 
-    public static void main(String[] args) throws IOException{
-        BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+		while (!q.isEmpty()) {
+			int[] rc = q.poll();
 
-        StringTokenizer st = new StringTokenizer(br.readLine());
+			int curR = rc[0];
+			int curC = rc[1];
 
-        N = Integer.parseInt(st.nextToken());
-        M = Integer.parseInt(st.nextToken());
+			if (curR == n - 1 && curC == m - 1)
+				return rc[2];
 
+			for (int d = 0; d < 4; d++) {
+				int nr = curR + dr[d];
+				int nc = curC + dc[d];
 
-        map = new int[N][M];
+				if (nr < 0 || nc < 0 || nr >= n || nc >= m)
+					continue;
+				if (vis[nr][nc] || miro[nr][nc] == 0)
+					continue;
 
-        visited = new boolean[N][M];
+				vis[nr][nc] = true;
+				q.add(new int[] { nr, nc, rc[2] + 1 });
+			}
+		}
 
+		return -1;
+	}
 
-        for(int i=0; i<N; i++){
-            String str = br.readLine();
-
-            for(int j=0; j<M; j++){
-                map[i][j] = str.charAt(j)-'0';
-            }
-        }
-
-
-        bfs(0,0);
-
-
-    }
-
-
-    public static void bfs(int r, int c){
-        Queue<node> queue = new LinkedList<>();
-        queue.add(new node(r,c,1));
-        visited[r][c] = true;
-
-        while(!queue.isEmpty()){
-            node node = queue.poll();
-
-            int row = node.r;
-            int cul = node.c;
-            int count = node.count;
-
-            if(row == N-1 && cul == M-1){
-                result = node.count;
-                System.out.println(result);
-                break;
-            }
-
-
-            for(int d=0; d<4; d++){
-                int nr = row+dr[d];
-                int nc = cul+dc[d];
-
-                if(nr<0 || nr>=N || nc<0 || nc>=M)
-                    continue;
-
-                if(visited[nr][nc])
-                    continue;
-
-                if(map[nr][nc]!=1)
-                    continue;
-
-                queue.add(new node(nr,nc,count+1));
-                visited[nr][nc] = true;
-            }
-
-
-        }
-
-    }
-
-
-    
 }
