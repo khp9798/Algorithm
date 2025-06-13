@@ -32,7 +32,7 @@ public class Main {
 
 		board = new int[h][w];
 
-		vis = new boolean[h][w][k+1];
+		vis = new boolean[h][w][k + 1];
 
 		for (int r = 0; r < h; r++) {
 			st = new StringTokenizer(br.readLine());
@@ -59,11 +59,9 @@ public class Main {
 			if (r == h - 1 && c == w - 1)
 				return count;
 
+			Moving(r, c, count, horseMovingCount, 4, dr, dc);
 			if (horseMovingCount > 0) {
 				Moving(r, c, count, horseMovingCount, 8, horseR, horseC);
-				Moving(r, c, count, horseMovingCount, 4, dr, dc);
-			} else {
-				Moving(r, c, count, horseMovingCount, 4, dr, dc);
 			}
 		}
 
