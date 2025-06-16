@@ -1,3 +1,5 @@
+
+
 import java.util.*;
 import java.io.*;
 
@@ -19,16 +21,16 @@ public class Main {
 			arr[i] = Integer.parseInt(st.nextToken());
 		}
 
-		List<Integer> result = new ArrayList<>();
+		int[] result = new int[n];
 		
 		for(int i=n-1; i>=0; i--) {
 			while(!stack.isEmpty() && stack.peek() <= arr[i]) {
 				stack.pop();
 			}
 			
-			if(stack.isEmpty()) result.add(-1);
+			if(stack.isEmpty()) result[i] = -1;
 			else {
-				result.add(stack.peek());
+				result[i] = stack.peek();
 			}
 			
 			stack.add(arr[i]);
@@ -36,8 +38,8 @@ public class Main {
 		
 		
 		StringBuilder sb = new StringBuilder();
-		for(int i = result.size()-1; i>=0; i--) {
-			sb.append(result.get(i)+" ");
+		for(int i = 0; i<n; i++) {
+			sb.append(result[i]+" ");
 		}
 
 		System.out.println(sb.toString());
