@@ -1,54 +1,54 @@
-import java.util.*;
 import java.io.*;
+import java.util.*;
 
 public class Main {
 
-	public static void main(String[] args) throws IOException {
-		// TODO Auto-generated method stub
-		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+    static class Num {
+        int idx;
+        int value;
 
-		BufferedWriter bw = new BufferedWriter(new OutputStreamWriter(System.out));
+        Num(int idx, int value) {
+            this.idx = idx;
+            this.value = value;
+        };
+    }
 
-		StringTokenizer st = new StringTokenizer(br.readLine());
+    public static void main(String[] args) throws IOException {
+        try (BufferedReader br = new BufferedReader(new InputStreamReader(System.in))) {
+            StringTokenizer st = new StringTokenizer(br.readLine());
 
-		// 수의 개수
-		int n = Integer.parseInt(st.nextToken());
+            int N = Integer.parseInt(st.nextToken());
 
-		int L = Integer.parseInt(st.nextToken());
+            int L = Integer.parseInt(st.nextToken());
 
-		Deque<Num> deq = new ArrayDeque<>();
+            int[] num = new int[N];
 
-		st = new StringTokenizer(br.readLine());
-		for (int i = 0; i < n; i++) {
-			int num = Integer.parseInt(st.nextToken());
+            st = new StringTokenizer(br.readLine());
+            for (int i = 0; i < N; i++) {
+                num[i] = Integer.parseInt(st.nextToken());
+            }
 
-			while (!deq.isEmpty() && deq.getLast().num > num) {
-				deq.removeLast();
-			}
+            Deque<Num> deq = new ArrayDeque<>();
 
-			deq.addLast(new Num(i, num));
+            StringBuilder sb = new StringBuilder();
 
-			if (deq.getFirst().idx <= i - L) {
-				deq.removeFirst();
+            for (int i = 0; i < N; i++) {
 
-			}
-			bw.write(deq.getFirst().num + " ");
-		}
-		
-		bw.flush();
-		br.close();
-		bw.close();
+                while (!deq.isEmpty() && deq.peekLast().value > num[i]) {
+                    deq.pollLast();
+                }
 
-	}
+                deq.offer(new Num(i, num[i]));
 
-	static class Num {
-		int idx;
-		int num;
+                if (deq.peekFirst().idx < i - L + 1) {
+                    deq.pollFirst();
+                }
 
-		Num(int idx, int num) {
-			this.idx = idx;
-			this.num = num;
-		}
-	}
+                sb.append(deq.peekFirst().value).append(" ");
+            }
 
+            System.out.println(sb);
+
+        }
+    }
 }
