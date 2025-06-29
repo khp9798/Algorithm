@@ -1,23 +1,23 @@
-import java.util.*;
 import java.io.*;
+import java.util.*;
 
 public class Main {
-    public static void main(String[] args) throws IOException {
-        try (BufferedReader br = new BufferedReader(new InputStreamReader(System.in))) {
+    public static void main(String[] args) throws IOException{
+        try(BufferedReader br = new BufferedReader(new InputStreamReader(System.in))){
+            int n = Integer.parseInt(br.readLine());
+
 
             PriorityQueue<Integer> left = new PriorityQueue<>(Comparator.reverseOrder());
             PriorityQueue<Integer> right = new PriorityQueue<>();
 
-            int N = Integer.parseInt(br.readLine());
-
             StringBuilder sb = new StringBuilder();
-            for (int i = 0; i < N; i++) {
-                int num = Integer.parseInt(br.readLine());
-                left.offer(num);
+
+            for(int i=0; i<n; i++){
+                left.offer(Integer.parseInt(br.readLine()));
 
                 right.offer(left.poll());
 
-                if (left.size() < right.size()) {
+                if(left.size()<right.size()){
                     left.offer(right.poll());
                 }
 
@@ -28,5 +28,4 @@ public class Main {
         }
 
     }
-
 }
