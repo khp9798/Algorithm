@@ -1,59 +1,68 @@
+import java.io.*;
+import java.util.*;
 
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStreamReader;
-import java.util.StringTokenizer;
+class Main {
 
-public class Main {
+    // 정점의 개수
+    static int n;
 
-	static int[][] nodes;
-	static boolean[] visited;
+    // 간선의 개수
+    static int m;
 
-	public static void main(String[] args) throws IOException {
-		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+    // 간선정보
+    static ArrayList<Integer>[] edge;
 
-		StringTokenizer st = new StringTokenizer(br.readLine());
+    static boolean[] visited;
 
-		// 노드 개수
-		int N = Integer.parseInt(st.nextToken());
+    public static void main(String[] args) throws IOException {
+        // 코드 작성
+        try (BufferedReader br = new BufferedReader(new InputStreamReader(System.in))) {
+            StringTokenizer st = new StringTokenizer(br.readLine());
 
-		// 간선 개수
-		int M = Integer.parseInt(st.nextToken());
+            n = Integer.parseInt(st.nextToken());
 
-		nodes = new int[N + 1][N + 1];
-		visited = new boolean[N + 1];
+            m = Integer.parseInt(st.nextToken());
 
-		for (int i = 0; i < M; i++) {
-			st = new StringTokenizer(br.readLine());
+            edge = new ArrayList[n];
 
-			int u = Integer.parseInt(st.nextToken());
+            for (int i = 0; i < n; i++) {
+                edge[i] = new ArrayList<Integer>();
+            }
 
-			int v = Integer.parseInt(st.nextToken());
+            for (int i = 0; i < m; i++) {
+                st = new StringTokenizer(br.readLine());
 
-			nodes[u][v] = 1;
-			nodes[v][u] = 1;
-		}
+                int a = Integer.parseInt(st.nextToken())-1;
 
-		int cnt = 0;
-		for (int i = 1; i < N + 1; i++) {
-			if (!visited[i]) {
-				dfs(i);
-				cnt++;
-			}
-		}
+                int b = Integer.parseInt(st.nextToken())-1;
 
-		System.out.println(cnt);
-	}
+                edge[a].add(b);
 
-	private static void dfs(int start) {
-		visited[start] = true;
+                edge[b].add(a);
+            }
 
-		for(int i=1; i<nodes.length; i++) {
-			if (nodes[start][i]==1 && !visited[i]) {
-				dfs(i);
-			}
-		}
-		
-	}
+            visited = new boolean[n];
 
+            int count = 0;
+
+            for (int i = 0; i < n; i++) {
+                if (!visited[i]) {
+                    dfs(i);
+                    count++;
+                }
+            }
+
+            System.out.println(count);
+        }
+    }
+
+    static void dfs(int v) {
+        visited[v] = true;
+
+        for (int i : edge[v]) {
+            if (!visited[i]) {
+                dfs(i);
+            }
+        }
+    }
 }
