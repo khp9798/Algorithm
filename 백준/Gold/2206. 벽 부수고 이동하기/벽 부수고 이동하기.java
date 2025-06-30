@@ -1,126 +1,80 @@
+import java.io.*;
+import java.util.*;
 
+class Main {
 
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStreamReader;
-import java.util.LinkedList;
-import java.util.Queue;
-import java.util.StringTokenizer;
+    static int n, m;
 
-public class Main {
+    static int[][] map;
 
-	static int N;
-	static int M;
+    static boolean[][][] visited;
 
-	static int[][] map;
-	static boolean[][][] visited;
+    static int[] dr = { -1, 1, 0, 0 };
+    static int[] dc = { 0, 0, -1, 1 };
 
-	public static void main(String[] args) throws IOException {
-		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+    public static void main(String[] args) throws IOException {
+        // 코드 작성
+        try (BufferedReader br = new BufferedReader(new InputStreamReader(System.in))) {
+            String[] nm = br.readLine().split(" ");
 
-		StringTokenizer st = new StringTokenizer(br.readLine());
+            n = Integer.parseInt(nm[0]);
+            m = Integer.parseInt(nm[1]);
 
-		N = Integer.parseInt(st.nextToken());
-		M = Integer.parseInt(st.nextToken());
+            map = new int[n][m];
 
-		map = new int[N][M];
-		visited = new boolean[N][M][2];
+            visited = new boolean[n][m][2];
 
-		for (int r = 0; r < N; r++) {
-			String [] str = br.readLine().split("");
-			for (int c = 0; c < M; c++) {
-				int num = Integer.parseInt(str[c]);
-				map[r][c] = num == 1 ? -1 : num;
-			}
-		}
-		
-		
-		//벽을 안깬 경우
-		visited[0][0][1] = true;
-		
-		//벽을 깬 경우
-		visited[0][0][0] = true;
-		
-		//두 경우 모두 0,0에서 시작하니 방문처리 
-		
-		bfs(0, 0, 1,1);
-		
-		
-		
+            for (int i = 0; i < n; i++) {
+                String str = br.readLine();
+                for (int j = 0; j < m; j++) {
+                    map[i][j] = str.charAt(j) - '0';
+                }
+            }
 
-		System.out.println(res);
+            System.out.print(bfs());
 
-	}
+        }
+    }
 
-	static class Node {
-		int r;
-		int c;
-		int crush;
-		int road;
-		public Node(int r, int c, int crush, int road) {
-			super();
-			this.r = r;
-			this.c = c;
-			this.crush = crush;
-			this.road = road;
-		}
+    static int bfs() {
+        Queue<int[]> q = new ArrayDeque<>();
+        q.offer(new int[] { 0, 0, 1, 1 });
+        visited[0][0][1] = true;
 
-		
+        int answer = -1;
 
-	}
+        while (!q.isEmpty()) {
+            int[] info = q.poll();
 
-	static int[] dr = { -1, 1, 0, 0 };
-	static int[] dc = { 0, 0, -1, 1 };
+            int r = info[0];
+            int c = info[1];
+            int cnt = info[2];
+            int dist = info[3];
 
-	
-	
-	static int res = -1;
-	static void bfs(int r, int c, int crush, int length) {
-		Queue<Node> queue = new LinkedList<>();
-		queue.add(new Node(r, c, crush,length));
-		
+            if (r == n - 1 && c == m - 1) {
+                answer = dist;
+                break;
+            }
 
-		while (!queue.isEmpty()) {
-			Node n = queue.poll();
+            for (int d = 0; d < 4; d++) {
+                int nr = r + dr[d];
+                int nc = c + dc[d];
 
-			int row = n.r;
-			int col = n.c;
+                if (nr < 0 || nc < 0 || nr >= n || nc >= m)
+                    continue;
 
-			int road = n.road;
-			int cnt = n.crush;
-			
+                if (map[nr][nc] == 1 && cnt > 0 && !visited[nr][nc][cnt - 1]) {
+                    visited[nr][nc][cnt - 1] = true;
+                    q.offer(new int[] { nr, nc, cnt - 1, dist + 1 });
+                }
 
-			if(row==N-1 && col == M-1) {
+                else if (map[nr][nc] == 0 && !visited[nr][nc][cnt]) {
+                    visited[nr][nc][cnt] = true;
+                    q.offer(new int[] { nr, nc, cnt, dist + 1 });
+                }
+            }
+        }
 
-				res = road;
-				return;
-			}
-			
-			
-			
-			
-
-			for (int d = 0; d < 4; d++) {
-				int nr = row + dr[d];
-				int nc = col + dc[d];
-
-				if (0 <= nr && nr < N && 0 <= nc && nc < M) {
-					if (cnt > 0 && !visited[nr][nc][cnt-1] &&map[nr][nc]==-1) {
-						//벽을 깬 경우
-						visited[nr][nc][cnt-1] = true;
-						queue.add(new Node(nr,nc,cnt-1,road+1));
-				
-					}
-					else if(!visited[nr][nc][cnt] && map[nr][nc]!=-1) {
-						//벽을 안깨는 경우
-						visited[nr][nc][cnt] = true;
-						queue.add(new Node(nr,nc,cnt,road+1));
-	
-					}
-				}
-			}
-
-		}
-	}
-
+        return answer;
+    }
 }
