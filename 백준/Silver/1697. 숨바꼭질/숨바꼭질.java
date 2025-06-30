@@ -1,51 +1,59 @@
-
-import java.util.*;
 import java.io.*;
+import java.util.*;
 
-public class Main {
+class Main {
 
-	static Queue<Integer> q = new LinkedList<>();
-	static int[] dist;
+    // 수빈점
+    static int n;
 
-	public static void main(String[] args) throws IOException {
-		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+    // 동생점
+    static int k;
 
-		StringTokenizer st = new StringTokenizer(br.readLine());
+    static int[] dist = new int[100001];
 
-		int n = Integer.parseInt(st.nextToken());
-		int k = Integer.parseInt(st.nextToken());
+    public static void main(String[] args) throws IOException {
+        // 코드 작성
+        try (BufferedReader br = new BufferedReader(new InputStreamReader(System.in))) {
+            String[] info = br.readLine().split(" ");
 
-		dist = new int[200000];
+            n = Integer.parseInt(info[0]);
 
-		q.add(n);
-		Arrays.fill(dist, -1);
-		dist[n] = 0;
+            k = Integer.parseInt(info[1]);
 
-		while (!q.isEmpty()) {
-			int curr = q.poll();
+            Arrays.fill(dist, Integer.MAX_VALUE);
 
-			if (curr == k) {
-				System.out.println(dist[curr]);
-				return;
-			}
+            bfs(n);
+        }
 
-			int[] nx = new int[] { curr + 1, curr - 1, curr * 2 };
+    }
 
-			for (int num : nx) {
-				addQ(num, dist[curr]);
-			}
-		}
+    static void bfs(int start) {
+        Queue<Integer> q = new ArrayDeque<>();
+        dist[start] = 0;
+        q.offer(start);
 
-	}
+        int seconds = Integer.MAX_VALUE;
 
-	static void addQ(int idx, int count) {
-		if (idx < 0 || idx >= 200000)
-			return;
-		else if (dist[idx] >= 0)
-			return;
+        while (!q.isEmpty()) {
+            int curr = q.poll();
 
-		dist[idx] = count + 1;
-		q.add(idx);
-	}
+            if (curr == k) {
+                break;
+            }
 
+            int[] cases = new int[] { curr - 1, curr + 1, 2 * curr };
+
+            for (int c : cases) {
+                if (c < 0 || c >= 100001)
+                    continue;
+                if (dist[c] != Integer.MAX_VALUE)
+                    continue;
+
+                q.offer(c);
+                dist[c] = dist[curr] + 1;
+            }
+        }
+
+        System.out.print(dist[k]);
+    }
 }
