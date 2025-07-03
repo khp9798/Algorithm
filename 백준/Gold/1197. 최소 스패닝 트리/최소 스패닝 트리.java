@@ -1,86 +1,81 @@
+import java.io.*;
+import java.util.*;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.PriorityQueue;
-import java.util.Scanner;
+class Main {
 
-public class Main {
+    static int v, e;
 
-	static class Edge implements Comparable<Edge>{
-		int A,B,W;
+    static class Edge implements Comparable<Edge> {
+        int a;
+        int b;
+        int cost;
 
-		public Edge(int a, int b, int w) {
-			super();
-			A = a;
-			B = b;
-			W = w;
-		}
+        Edge(int a, int b, int cost) {
+            this.a = a;
+            this.b = b;
+            this.cost = cost;
+        }
 
-		@Override
-		public int compareTo(Main.Edge o) {
-			// TODO Auto-generated method stub
-			return this.W - o.W;
-		}
-		
-		
-	}
-	
-	static List<Edge>[] rel;
-	
-	public static void main(String[] args) {
-		Scanner sc = new Scanner(System.in);
+        @Override
+        public int compareTo(Edge o) {
+            return this.cost - o.cost;
+        }
+    }
 
-		int V = sc.nextInt();
-		int E = sc.nextInt();
-		
-		
-		rel = new ArrayList[V+1];
-		
-		for(int i=1; i<=V; i++) {
-			rel[i] = new ArrayList<>();
-		}
-		
-		for(int i=0; i<E; i++) {
-			int A = sc.nextInt();
-			int B = sc.nextInt();
-			int W = sc.nextInt();
-			
-			rel[A].add(new Edge(A,B,W));
-			rel[B].add(new Edge(B,A,W));
-			
-		}
-		
-		
-		boolean[] visited = new boolean[V+1];
-		int [] dist = new int[V+1];
-		
-		PriorityQueue<Edge> pq = new PriorityQueue<>();
-		
-		pq.addAll(rel[1]);
-		visited[1] = true;
-		
-		
-		int res=0;
-		int pick=1;
-		
-		
-		while(pick!=V) {
-			Edge e = pq.poll();
-			
-			if(visited[e.B]) continue;
-			
-			visited[e.B] = true;
-			res+=e.W;
-			pick++;
-			
-			pq.addAll(rel[e.B]);
-		}
-		
-		
-		System.out.println(res);
-		
-		
-	}
+    static List<Edge> edges;
 
-	
+    static int[] p;
+
+    public static void main(String[] args) throws IOException {
+        // 코드 작성
+        try (BufferedReader br = new BufferedReader(new InputStreamReader(System.in))) {
+            StringTokenizer st = new StringTokenizer(br.readLine());
+
+            v = Integer.parseInt(st.nextToken());
+            e = Integer.parseInt(st.nextToken());
+
+            edges = new ArrayList<>();
+
+            for (int i = 0; i < e; i++) {
+                st = new StringTokenizer(br.readLine());
+                int a = Integer.parseInt(st.nextToken());
+                int b = Integer.parseInt(st.nextToken());
+                int c = Integer.parseInt(st.nextToken());
+
+                edges.add(new Edge(a, b, c));
+            }
+
+            Collections.sort(edges);
+
+            p = new int[v + 1];
+            for (int i = 1; i <= v; i++) {
+                p[i] = i;
+            }
+
+            long total = 0;
+
+            for (Edge e : edges) {
+                if (find(e.a) != find(e.b)) {
+                    union(e.a, e.b);
+                    total += e.cost;
+                }
+            }
+
+            System.out.println(total);
+        }
+    }
+
+    static int find(int x) {
+        if (p[x] == x)
+            return p[x];
+        return p[x] = find(p[x]);
+    }
+
+    static void union(int x, int y) {
+        int rx = find(x);
+        int ry = find(y);
+        if (rx != ry) {
+            p[ry] = rx;
+        }
+    }
 }
