@@ -3,20 +3,6 @@ import java.util.*;
 
 class Main {
 
-    static class Node {
-        int idx, value;
-
-        Node(int idx, int value) {
-            this.idx = idx;
-            this.value = value;
-        }
-
-        @Override
-        public String toString() {
-            return "(" + idx + ", " + value + ")";
-        }
-    }
-
     public static void main(String[] args) throws IOException {
         // 코드 작성
         try (BufferedReader br = new BufferedReader(new InputStreamReader(System.in))) {
@@ -26,10 +12,10 @@ class Main {
 
             int m = Integer.parseInt(st.nextToken());
 
-            Deque<Node> deq = new ArrayDeque<>();
+            Deque<Integer> deq = new ArrayDeque<>();
 
             for (int i = 1; i <= n; i++) {
-                deq.addLast(new Node(i, i));
+                deq.addLast(i);
             }
 
             st = new StringTokenizer(br.readLine());
@@ -45,8 +31,8 @@ class Main {
             for (int target : arr) {
                 int idx = 0;
 
-                for (Node node : deq) {
-                    if (node.value == target)
+                for (int value : deq) {
+                    if (value == target)
                         break;
                     idx++;
                 }
@@ -55,13 +41,13 @@ class Main {
 
                 if (idx <= half) {
                     // 2번 연산
-                    while (deq.peekFirst().value != target) {
+                    while (deq.peekFirst() != target) {
                         deq.addLast(deq.pollFirst());
                         answer++;
                     }
                 } else {
                     // 3번 연산
-                    while (deq.peekFirst().value != target) {
+                    while (deq.peekFirst() != target) {
                         deq.addFirst(deq.pollLast());
                         answer++;
                     }
