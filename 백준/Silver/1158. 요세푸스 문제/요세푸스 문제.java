@@ -1,49 +1,29 @@
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStreamReader;
-import java.util.LinkedList;
-import java.util.Queue;
-import java.util.StringTokenizer;
+import java.io.*;
+import java.util.*;
 
-class Main{
-	public static void main(String[] args) throws IOException {
-		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
-		
-		StringTokenizer st = new StringTokenizer(br.readLine());
-		
-		StringBuilder sb = new StringBuilder();
-		
-		int N = Integer.parseInt(st.nextToken());
-		
-		int K = Integer.parseInt(st.nextToken());
-		
-		
-		Queue<Integer> q = new LinkedList<>();
-		
-		for(int i=1; i<=N; i++) {
-			q.add(i);
-		}
-		
-		sb.append("<");
-		
-		int cnt = 0;
-		while(!q.isEmpty()) {
-			int num = q.poll();
-			cnt++;
-			if(cnt==K) {
-				if(q.isEmpty()) {
-					sb.append(num);					
-				}
-				else {
-					sb.append(num+", ");					
-					cnt=0;					
-				}
-			}else {
-				q.add(num);
-			}
-		}
-		sb.append(">");
-		
-		System.out.println(sb);
-	}
+public class Main {
+    public static void main(String[] args) throws Exception {
+        BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+        StringTokenizer st = new StringTokenizer(br.readLine());
+
+        int n = Integer.parseInt(st.nextToken());
+        int k = Integer.parseInt(st.nextToken());
+
+        List<Integer> arr = new ArrayList<>(n);
+        for (int i = 1; i <= n; i++) arr.add(i);
+
+        StringBuilder sb = new StringBuilder();
+        sb.append('<');
+
+        int idx = 0; // 현재 제거할 위치의 시작 인덱스
+        while (!arr.isEmpty()) {
+            idx = (idx + k - 1) % arr.size(); // k번째로 이동
+            int removed = arr.remove(idx);    // 해당 위치 제거
+            sb.append(removed);
+            if (!arr.isEmpty()) sb.append(", ");
+        }
+        sb.append('>');
+
+        System.out.println(sb);
+    }
 }
