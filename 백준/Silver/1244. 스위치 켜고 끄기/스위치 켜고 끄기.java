@@ -1,64 +1,44 @@
-import java.io.BufferedReader;
-import java.io.InputStreamReader;
-import java.util.StringTokenizer;
+import java.io.*;
+import java.util.*;
 
 public class Main {
+    static int n;
+    static int[] s; // 1-indexed
 
-	public static void main(String[] args) throws Exception{
-		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
-		
-		//스위치의 갯수
-		int N = Integer.parseInt(br.readLine());
-		
-		//스위치 상태를 저장할 배열  0번 인덱스는 안씀
-		int[] sw = new int[N+1];
-		
-		StringTokenizer st = new StringTokenizer(br.readLine());
-		//스위치 상태 입력 받기
-		for(int i=1; i<N+1; i++) {
-			sw[i] = Integer.parseInt(st.nextToken());
-		}
-		
-		
-		//학생 수 입력
-		int studentcnt = Integer.parseInt(br.readLine());
-		
-		for(int s=0; s<studentcnt; s++) {
-			st = new StringTokenizer(br.readLine());
-			
-			int gender = Integer.parseInt(st.nextToken());
-			int num = Integer.parseInt(st.nextToken());
-			
-			//남자라면
-			if(gender==1) {
-				for(int i=num; i<N+1; i+=num) {
-					sw[i] = sw[i] == 1 ? 0:1;
-				}
-			}
-			//여자라면 num으로 받은 번호 중심으로 양 옆이 대칭이 아닐 때까지 간다.
-			else {
-				//일단 num은 바꿔야됨
-				sw[num] = sw[num] == 1? 0:1;
-				
-				//탐색범위
-				int a=1;
-				while(1<=num-a && num+a<N+1&& sw[num-a]==sw[num+a]) {
-					sw[num-a] = sw[num-a] == 1? 0:1;
-					sw[num+a] = sw[num+a] == 1? 0:1;
-					a++;
-				}
-			}
-			
-			
-			
-		}
-		
-		for(int i=1; i<N+1; i++) {
-			System.out.print(sw[i]+" ");
-			if(i%20==0) {
-				System.out.println();
-			}
-		}
-	}
+    public static void main(String[] args) throws Exception {
+        BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+        StringBuilder out = new StringBuilder();
 
+        n = Integer.parseInt(br.readLine().trim());
+        s = new int[n + 1];
+
+        StringTokenizer st = new StringTokenizer(br.readLine());
+        for (int i = 1; i <= n; i++) s[i] = Integer.parseInt(st.nextToken());
+
+        int m = Integer.parseInt(br.readLine().trim());
+        for (int i = 0; i < m; i++) {
+            st = new StringTokenizer(br.readLine());
+            int gender = Integer.parseInt(st.nextToken());
+            int k = Integer.parseInt(st.nextToken());
+
+            if (gender == 1) { // 남학생
+                for (int idx = k; idx <= n; idx += k) toggle(idx);
+            } else { // 여학생
+                int l = k, r = k;
+                while (l - 1 >= 1 && r + 1 <= n && s[l - 1] == s[r + 1]) {
+                    l--; r++;
+                }
+                for (int idx = l; idx <= r; idx++) toggle(idx);
+            }
+        }
+
+        // 출력: 한 줄에 20개씩
+        for (int i = 1; i <= n; i++) {
+            out.append(s[i]).append(' ');
+            if (i % 20 == 0) out.append('\n');
+        }
+        System.out.print(out.toString().trim());
+    }
+
+    static void toggle(int i) { s[i] = 1 - s[i]; }
 }
